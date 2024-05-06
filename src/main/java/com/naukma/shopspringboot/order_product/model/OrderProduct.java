@@ -20,18 +20,20 @@ public class OrderProduct {
     private Integer amount;
 
     @ManyToOne
-    @JoinColumn(name = "colorId")
-    private Color color;
-
-    @ManyToOne
-    @JoinColumn(name = "upholsteryId")
-    private Upholstery upholstery;
-
-    @ManyToOne
     @MapsId("orderId")
+    @JoinColumn(name = "order_id")
     private Order order;
 
     @ManyToOne
     @MapsId("productId")
+    @JoinColumn(name = "product_id")
     private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "color_id")
+    private Color color;
+
+    @ManyToOne
+    @JoinColumn(name = "upholstery_id")
+    private Upholstery upholstery;
 }

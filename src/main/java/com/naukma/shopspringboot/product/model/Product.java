@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -45,21 +46,21 @@ public class Product {
     private String packageDescription;
 
     @ManyToOne
-    @JoinColumn(name = "subcategoryId", nullable = false)
+    @JoinColumn(name = "subcategory_id", nullable = false)
     private Subcategory subcategory;
 
     @OneToMany(mappedBy = "product")
     private Set<OrderProduct> orderProducts;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "product_color",
-            joinColumns = @JoinColumn(name = "productId"),
-            inverseJoinColumns = @JoinColumn(name = "colorId"))
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "color_id"))
     private Set<Color> colors;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "product_upholstery",
-            joinColumns = @JoinColumn(name = "productId"),
-            inverseJoinColumns = @JoinColumn(name = "upholsteryId"))
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "upholstery_id"))
     private Set<Upholstery> upholsteries;
 }

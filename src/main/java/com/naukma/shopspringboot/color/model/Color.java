@@ -3,6 +3,7 @@ package com.naukma.shopspringboot.color.model;
 import com.naukma.shopspringboot.order_product.model.OrderProduct;
 import com.naukma.shopspringboot.product.model.Product;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +22,7 @@ public class Color {
     private String name;
 
     @Column(unique = true, nullable = false, length = 6)
+    @Pattern(regexp = "^[A-Za-z\\d]{6}$")
     private String hexCode;
 
     @OneToMany(mappedBy = "color")

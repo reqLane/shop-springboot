@@ -1,9 +1,9 @@
 package com.naukma.shopspringboot.order.status;
 
 public enum OrderStatus {
-    COMPLETED("Completed"),
-    PENDING("Pending"),
-    CANCELLED("Cancelled");
+    COMPLETED("COMPLETED"),
+    PENDING("PENDING"),
+    CANCELLED("CANCELLED");
 
     private final String status;
 

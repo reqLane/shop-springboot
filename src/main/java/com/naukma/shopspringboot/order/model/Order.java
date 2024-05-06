@@ -31,9 +31,16 @@ public class Order {
     private OrderStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "order")
     private Set<OrderProduct> orderProducts;
+
+    @PrePersist
+    public void prePersist() {
+        if (getStatus() == null) {
+            setStatus(OrderStatus.PENDING);
+        }
+    }
 }
