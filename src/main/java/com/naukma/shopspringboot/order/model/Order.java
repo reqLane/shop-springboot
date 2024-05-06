@@ -1,6 +1,7 @@
 package com.naukma.shopspringboot.order.model;
 
 import com.naukma.shopspringboot.order.status.OrderStatus;
+import com.naukma.shopspringboot.order_product.model.OrderProduct;
 import com.naukma.shopspringboot.user.model.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -31,4 +33,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "order")
+    private Set<OrderProduct> orderProducts;
 }

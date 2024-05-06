@@ -2,11 +2,13 @@ package com.naukma.shopspringboot.user.model;
 
 import com.naukma.shopspringboot.order.model.Order;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Date;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -27,9 +29,11 @@ public class User {
     private String fathername;
 
     @Column(unique = true, nullable = false, length = 50)
+    @Email
     private String email;
 
     @Column(unique = true, nullable = false, length = 15)
+    @Pattern(regexp = "^\\d{10,15}$")
     private String phone;
 
     private Date birthdate;
@@ -38,5 +42,5 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    private List<Order> orders;
+    private Set<Order> orders;
 }

@@ -1,11 +1,15 @@
 package com.naukma.shopspringboot.product.model;
 
+import com.naukma.shopspringboot.color.model.Color;
+import com.naukma.shopspringboot.order_product.model.OrderProduct;
 import com.naukma.shopspringboot.subcategory.model.Subcategory;
+import com.naukma.shopspringboot.upholstery.model.Upholstery;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -43,4 +47,19 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "subcategoryId", nullable = false)
     private Subcategory subcategory;
+
+    @OneToMany(mappedBy = "product")
+    private Set<OrderProduct> orderProducts;
+
+    @ManyToMany
+    @JoinTable(name = "product_color",
+            joinColumns = @JoinColumn(name = "productId"),
+            inverseJoinColumns = @JoinColumn(name = "colorId"))
+    private Set<Color> colors;
+
+    @ManyToMany
+    @JoinTable(name = "product_upholstery",
+            joinColumns = @JoinColumn(name = "productId"),
+            inverseJoinColumns = @JoinColumn(name = "upholsteryId"))
+    private Set<Upholstery> upholsteries;
 }

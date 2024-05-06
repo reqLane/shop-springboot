@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -23,5 +23,5 @@ public class Category {
     private String description;
 
     @OneToMany(mappedBy = "category")
-    private List<Subcategory> subcategories;
+    private Set<Subcategory> subcategories;
 }
