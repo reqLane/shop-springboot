@@ -3,7 +3,7 @@ package com.naukma.shopspringboot.order_product.model;
 import com.naukma.shopspringboot.color.model.Color;
 import com.naukma.shopspringboot.order.model.Order;
 import com.naukma.shopspringboot.product.model.Product;
-import com.naukma.shopspringboot.upholstery.model.Upholstery;
+import com.naukma.shopspringboot.material.model.Material;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +34,6 @@ public class OrderProduct {
     private Color color;
 
     @ManyToOne
-    @JoinColumn(name = "upholstery_id")
-    private Upholstery upholstery;
+    @JoinColumn(name = "material_id")
+    private Material material;
 }

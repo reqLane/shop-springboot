@@ -13,8 +13,8 @@ import com.naukma.shopspringboot.product.ProductRepo;
 import com.naukma.shopspringboot.product.model.Product;
 import com.naukma.shopspringboot.subcategory.SubcategoryRepo;
 import com.naukma.shopspringboot.subcategory.model.Subcategory;
-import com.naukma.shopspringboot.upholstery.UpholsteryRepo;
-import com.naukma.shopspringboot.upholstery.model.Upholstery;
+import com.naukma.shopspringboot.material.MaterialRepo;
+import com.naukma.shopspringboot.material.model.Material;
 import com.naukma.shopspringboot.user.UserRepo;
 import com.naukma.shopspringboot.user.model.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +43,7 @@ class ShopSpringbootApplicationTests {
     @Autowired
     private ColorRepo colorRepo;
     @Autowired
-    private UpholsteryRepo upholsteryRepo;
+    private MaterialRepo materialRepo;
     @Autowired
     private OrderProductRepo orderProductRepo;
 
@@ -52,10 +52,10 @@ class ShopSpringbootApplicationTests {
         orderProductRepo.deleteAll();
         for (Product p : productRepo.findAll()) {
             p.getColors().clear();
-            p.getUpholsteries().clear();
+            p.getMaterials().clear();
             productRepo.save(p);
         }
-        upholsteryRepo.deleteAll();
+        materialRepo.deleteAll();
         colorRepo.deleteAll();
         orderRepo.deleteAll();
         userRepo.deleteAll();
@@ -111,17 +111,17 @@ class ShopSpringbootApplicationTests {
         }
 
         for(int i = 0; i < 3; i++) {
-            Upholstery uph = new Upholstery();
-            uph.setName("Upholstery " + i);
-            upholsteryRepo.save(uph);
+            Material mat = new Material();
+            mat.setName("Upholstery " + i);
+            materialRepo.save(mat);
         }
 
         for (Product p : productRepo.findAll()) {
             for (Color clr : colorRepo.findAll()) {
                 p.getColors().add(clr);
             }
-            for (Upholstery uph : upholsteryRepo.findAll()) {
-                p.getUpholsteries().add(uph);
+            for (Material mat : materialRepo.findAll()) {
+                p.getMaterials().add(mat);
             }
             productRepo.save(p);
         }
@@ -150,8 +150,8 @@ class ShopSpringbootApplicationTests {
             for (Color clr : p.getColors()) {
                 op.setColor(clr);
             }
-            for (Upholstery uph : p.getUpholsteries()) {
-                op.setUpholstery(uph);
+            for (Material mat : p.getMaterials()) {
+                op.setMaterial(mat);
             }
 
             orderPrice = orderPrice.add(p.getPrice().multiply(new BigDecimal(op.getAmount())));

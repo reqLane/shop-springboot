@@ -3,13 +3,12 @@ package com.naukma.shopspringboot.product.model;
 import com.naukma.shopspringboot.color.model.Color;
 import com.naukma.shopspringboot.order_product.model.OrderProduct;
 import com.naukma.shopspringboot.subcategory.model.Subcategory;
-import com.naukma.shopspringboot.upholstery.model.Upholstery;
+import com.naukma.shopspringboot.material.model.Material;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -59,8 +58,8 @@ public class Product {
     private Set<Color> colors;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "product_upholstery",
+    @JoinTable(name = "product_material",
             joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "upholstery_id"))
-    private Set<Upholstery> upholsteries;
+            inverseJoinColumns = @JoinColumn(name = "material_id"))
+    private Set<Material> materials;
 }
