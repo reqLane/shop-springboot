@@ -5,15 +5,18 @@ import com.naukma.shopspringboot.order_product.model.OrderProduct;
 import com.naukma.shopspringboot.user.model.User;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "orders")
 public class Order {
     @Id
@@ -35,12 +38,26 @@ public class Order {
     private User user;
 
     @OneToMany(mappedBy = "order")
-    private Set<OrderProduct> orderProducts;
+    private Set<OrderProduct> orderProducts = new HashSet<>();
+
+    public Order(User user) {
+        this.user = user;
+    }
 
     @PrePersist
     public void prePersist() {
-        if (getStatus() == null) {
+        if (orderDate == null) {
+            setOrderDate(new Timestamp(System.currentTimeMillis()));
+        }
+        if (status == null) {
             setStatus(OrderStatus.PENDING);
+        }
+        if (price == null) {
+            BigDecimal totalPrice = BigDecimal.ZERO;
+            for (OrderProduct orderProduct : orderProducts) {
+                totalPrice = totalPrice.add(orderProduct.getProduct().getPrice().multiply(new BigDecimal(orderProduct.getAmount())));
+            }
+            setPrice(totalPrice);
         }
     }
 }

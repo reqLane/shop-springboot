@@ -1,12 +1,12 @@
 package com.naukma.shopspringboot.color;
 
 import com.naukma.shopspringboot.color.model.Color;
+import com.naukma.shopspringboot.color.model.ColorDTO;
+import com.naukma.shopspringboot.util.DTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ColorService {
@@ -19,41 +19,51 @@ public class ColorService {
 
     // BUSINESS LOGIC
 
-
+    public List<ColorDTO> getAllColors() {
+        return findAll()
+                .stream()
+                .sorted(Comparator.comparingLong(Color::getColorId))
+                .map(DTOMapper::toDTO)
+                .toList();
+    }
 
     // CRUD OPERATIONS
 
-    public List<Color> findAll() {
-        List<Color> result = new ArrayList<>();
+    public Color getColorEntityByName(String name) {
+        return colorRepo.getColorByNameEqualsIgnoreCase(name);
+    }
+
+    private Set<Color> findAll() {
+        Set<Color> result = new HashSet<>();
         for (Color color : colorRepo.findAll()) {
             result.add(color);
         }
         return result;
     }
 
-    public Color findById(Long id) {
+    private Color findById(Long id) {
         Optional<Color> result = colorRepo.findById(id);
         if(result.isEmpty()) return null;
         else return result.get();
     }
 
-    public Color create(Color color) {
+    private Color create(Color color) {
         return colorRepo.save(color);
     }
 
-    public void update(Color color) {
+    private void update(Color color) {
         colorRepo.save(color);
     }
 
-    public void deleteById(Long id) {
+    private void deleteById(Long id) {
         colorRepo.deleteById(id);
     }
 
-    public void delete(Color color) {
+    private void delete(Color color) {
         colorRepo.deleteById(color.getColorId());
     }
 
-    public void deleteAll() {
+    private void deleteAll() {
         colorRepo.deleteAll();
     }
 }

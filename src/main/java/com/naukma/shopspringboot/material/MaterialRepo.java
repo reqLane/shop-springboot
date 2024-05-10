@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MaterialRepo extends CrudRepository<Material, Long> {
-
+    Material getMaterialByNameEqualsIgnoreCase(String name);
 }

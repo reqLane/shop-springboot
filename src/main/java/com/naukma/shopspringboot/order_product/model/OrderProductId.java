@@ -3,6 +3,7 @@ package com.naukma.shopspringboot.order_product.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
@@ -11,12 +12,18 @@ import java.util.Objects;
 @Embeddable
 @Getter
 @Setter
+@NoArgsConstructor
 public class OrderProductId implements Serializable {
     @Column(name = "order_id")
     private Long orderId;
 
     @Column(name = "product_id")
     private Long productId;
+
+    public OrderProductId(Long orderId, Long productId) {
+        this.orderId = orderId;
+        this.productId = productId;
+    }
 
     @Override
     public boolean equals(Object o) {

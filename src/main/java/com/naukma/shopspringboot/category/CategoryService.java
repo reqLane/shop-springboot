@@ -1,12 +1,16 @@
 package com.naukma.shopspringboot.category;
 
 import com.naukma.shopspringboot.category.model.Category;
+import com.naukma.shopspringboot.category.model.CategoryDTO;
+import com.naukma.shopspringboot.picture.model.Picture;
+import com.naukma.shopspringboot.subcategory.model.Subcategory;
+import com.naukma.shopspringboot.subcategory.model.SubcategoryDTO;
+import com.naukma.shopspringboot.util.DTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -19,41 +23,78 @@ public class CategoryService {
 
     // BUSINESS LOGIC
 
+    public byte[] getCategoryPicture(Long categoryId) {
+        Category category = findById(categoryId);
+        if (category == null) return null;
+        return category.getPicture();
+    }
 
+    public List<CategoryDTO> getAllCategories() {
+        return findAll()
+                .stream()
+                .filter(category -> !category.getSubcategories().isEmpty())
+                .sorted(Comparator.comparingLong(Category::getCategoryId))
+                .map(DTOMapper::toDTO)
+                .toList();
+    }
+
+    public List<SubcategoryDTO> getSubcategoriesByCategory(Long categoryId) {
+        Category category = findById(categoryId);
+        if (category == null) return null;
+        return category.getSubcategories()
+                .stream()
+                .sorted(Comparator.comparingLong(Subcategory::getSubcategoryId))
+                .map(DTOMapper::toDTO)
+                .toList();
+    }
+
+    public List<CategoryDTO> getTrendingCategories(Integer size) {
+        List<CategoryDTO> trending = findAll()
+                .stream()
+                .sorted((c1, c2) -> Integer.compare(c2.trendingIndex(), c1.trendingIndex()))
+                .map(DTOMapper::toDTO)
+                .toList();
+
+        return trending.subList(0, Math.min(size, trending.size()));
+    }
 
     // CRUD OPERATIONS
 
-    public List<Category> findAll() {
-        List<Category> result = new ArrayList<>();
+    public Category getCategoryEntityByName(String name) {
+        return categoryRepo.getCategoryByNameEqualsIgnoreCase(name);
+    }
+
+    private Set<Category> findAll() {
+        Set<Category> result = new HashSet<>();
         for (Category category : categoryRepo.findAll()) {
             result.add(category);
         }
         return result;
     }
 
-    public Category findById(Long id) {
+    private Category findById(Long id) {
         Optional<Category> result = categoryRepo.findById(id);
         if(result.isEmpty()) return null;
         else return result.get();
     }
 
-    public Category create(Category category) {
+    private Category create(Category category) {
         return categoryRepo.save(category);
     }
 
-    public void update(Category category) {
+    private void update(Category category) {
         categoryRepo.save(category);
     }
 
-    public void deleteById(Long id) {
+    private void deleteById(Long id) {
         categoryRepo.deleteById(id);
     }
 
-    public void delete(Category category) {
+    private void delete(Category category) {
         categoryRepo.deleteById(category.getCategoryId());
     }
 
-    public void deleteAll() {
+    private void deleteAll() {
         categoryRepo.deleteAll();
     }
 }

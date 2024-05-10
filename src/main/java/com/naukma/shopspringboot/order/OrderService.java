@@ -4,9 +4,7 @@ import com.naukma.shopspringboot.order.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class OrderService {
@@ -23,37 +21,37 @@ public class OrderService {
 
     // CRUD OPERATIONS
 
-    public List<Order> findAll() {
-        List<Order> result = new ArrayList<>();
+    private Set<Order> findAll() {
+        Set<Order> result = new HashSet<>();
         for (Order order : orderRepo.findAll()) {
             result.add(order);
         }
         return result;
     }
 
-    public Order findById(Long id) {
+    private Order findById(Long id) {
         Optional<Order> result = orderRepo.findById(id);
         if(result.isEmpty()) return null;
         else return result.get();
     }
 
-    public Order create(Order order) {
+    private Order create(Order order) {
         return orderRepo.save(order);
     }
 
-    public void update(Order order) {
+    private void update(Order order) {
         orderRepo.save(order);
     }
 
-    public void deleteById(Long id) {
+    private void deleteById(Long id) {
         orderRepo.deleteById(id);
     }
 
-    public void delete(Order order) {
+    private void delete(Order order) {
         orderRepo.deleteById(order.getOrderId());
     }
 
-    public void deleteAll() {
+    private void deleteAll() {
         orderRepo.deleteAll();
     }
 }

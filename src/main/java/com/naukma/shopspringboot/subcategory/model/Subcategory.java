@@ -4,13 +4,16 @@ import com.naukma.shopspringboot.category.model.Category;
 import com.naukma.shopspringboot.product.model.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "subcategory")
 public class Subcategory {
     @Id
@@ -25,5 +28,10 @@ public class Subcategory {
     private Category category;
 
     @OneToMany(mappedBy = "subcategory")
-    private Set<Product> products;
+    private Set<Product> products = new HashSet<>();
+
+    public Subcategory(String name, Category category) {
+        this.name = name;
+        this.category = category;
+    }
 }

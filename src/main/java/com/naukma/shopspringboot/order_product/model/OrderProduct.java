@@ -6,11 +6,13 @@ import com.naukma.shopspringboot.product.model.Product;
 import com.naukma.shopspringboot.material.model.Material;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "order_product")
 public class OrderProduct {
     @EmbeddedId
@@ -30,10 +32,19 @@ public class OrderProduct {
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "color_id")
+    @JoinColumn(name = "color_id", nullable = false)
     private Color color;
 
     @ManyToOne
-    @JoinColumn(name = "material_id")
+    @JoinColumn(name = "material_id", nullable = false)
     private Material material;
+
+    public OrderProduct(Integer amount, Order order, Product product, Color color, Material material) {
+        this.id = new OrderProductId(order.getOrderId(), product.getProductId());
+        this.amount = amount;
+        this.order = order;
+        this.product = product;
+        this.color = color;
+        this.material = material;
+    }
 }

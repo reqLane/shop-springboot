@@ -4,9 +4,7 @@ import com.naukma.shopspringboot.subcategory.model.Subcategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class SubcategoryService {
@@ -23,37 +21,41 @@ public class SubcategoryService {
 
     // CRUD OPERATIONS
 
-    public List<Subcategory> findAll() {
-        List<Subcategory> result = new ArrayList<>();
+    public Subcategory getSubcategoryEntityByName(String name) {
+        return subcategoryRepo.getSubcategoryByNameEqualsIgnoreCase(name);
+    }
+
+    private Set<Subcategory> findAll() {
+        Set<Subcategory> result = new HashSet<>();
         for (Subcategory subcategory : subcategoryRepo.findAll()) {
             result.add(subcategory);
         }
         return result;
     }
 
-    public Subcategory findById(Long id) {
+    private Subcategory findById(Long id) {
         Optional<Subcategory> result = subcategoryRepo.findById(id);
         if(result.isEmpty()) return null;
         else return result.get();
     }
 
-    public Subcategory create(Subcategory subcategory) {
+    private Subcategory create(Subcategory subcategory) {
         return subcategoryRepo.save(subcategory);
     }
 
-    public void update(Subcategory subcategory) {
+    private void update(Subcategory subcategory) {
         subcategoryRepo.save(subcategory);
     }
 
-    public void deleteById(Long id) {
+    private void deleteById(Long id) {
         subcategoryRepo.deleteById(id);
     }
 
-    public void delete(Subcategory subcategory) {
+    private void delete(Subcategory subcategory) {
         subcategoryRepo.deleteById(subcategory.getSubcategoryId());
     }
 
-    public void deleteAll() {
+    private void deleteAll() {
         subcategoryRepo.deleteAll();
     }
 }

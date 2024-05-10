@@ -5,14 +5,17 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "user")
 public class User {
     @Id
@@ -25,7 +28,7 @@ public class User {
     @Column(nullable = false, length = 16)
     private String surname;
 
-    @Column(nullable = false, length = 16)
+    @Column(length = 16)
     private String fathername;
 
     @Column(unique = true, nullable = false, length = 50)
@@ -42,5 +45,12 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    private Set<Order> orders;
+    private Set<Order> orders = new HashSet<>();
+
+    public User(String name, String surname, String email, String phone) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.phone = phone;
+    }
 }

@@ -4,9 +4,7 @@ import com.naukma.shopspringboot.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -23,37 +21,37 @@ public class UserService {
 
     // CRUD OPERATIONS
 
-    public List<User> findAll() {
-        List<User> result = new ArrayList<>();
+    private Set<User> findAll() {
+        Set<User> result = new HashSet<>();
         for (User user : userRepo.findAll()) {
             result.add(user);
         }
         return result;
     }
 
-    public User findById(Long id) {
+    private User findById(Long id) {
         Optional<User> result = userRepo.findById(id);
         if(result.isEmpty()) return null;
         else return result.get();
     }
 
-    public User create(User user) {
+    private User create(User user) {
         return userRepo.save(user);
     }
 
-    public void update(User user) {
+    private void update(User user) {
         userRepo.save(user);
     }
 
-    public void deleteById(Long id) {
+    private void deleteById(Long id) {
         userRepo.deleteById(id);
     }
 
-    public void delete(User user) {
+    private void delete(User user) {
         userRepo.deleteById(user.getUserId());
     }
 
-    public void deleteAll() {
+    private void deleteAll() {
         userRepo.deleteAll();
     }
 }

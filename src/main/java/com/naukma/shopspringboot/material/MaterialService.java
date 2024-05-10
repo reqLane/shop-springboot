@@ -1,12 +1,12 @@
 package com.naukma.shopspringboot.material;
 
 import com.naukma.shopspringboot.material.model.Material;
+import com.naukma.shopspringboot.material.model.MaterialDTO;
+import com.naukma.shopspringboot.util.DTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class MaterialService {
@@ -19,41 +19,51 @@ public class MaterialService {
 
     // BUSINESS LOGIC
 
-
+    public List<MaterialDTO> getAllMaterials() {
+        return findAll()
+                .stream()
+                .sorted(Comparator.comparingLong(Material::getMaterialId))
+                .map(DTOMapper::toDTO)
+                .toList();
+    }
 
     // CRUD OPERATIONS
 
-    public List<Material> findAll() {
-        List<Material> result = new ArrayList<>();
+    public Material getMaterialEntityByName(String name) {
+        return materialRepo.getMaterialByNameEqualsIgnoreCase(name);
+    }
+
+    private Set<Material> findAll() {
+        Set<Material> result = new HashSet<>();
         for (Material material : materialRepo.findAll()) {
             result.add(material);
         }
         return result;
     }
 
-    public Material findById(Long id) {
+    private Material findById(Long id) {
         Optional<Material> result = materialRepo.findById(id);
         if(result.isEmpty()) return null;
         else return result.get();
     }
 
-    public Material create(Material material) {
+    private Material create(Material material) {
         return materialRepo.save(material);
     }
 
-    public void update(Material material) {
+    private void update(Material material) {
         materialRepo.save(material);
     }
 
-    public void deleteById(Long id) {
+    private void deleteById(Long id) {
         materialRepo.deleteById(id);
     }
 
-    public void delete(Material material) {
+    private void delete(Material material) {
         materialRepo.deleteById(material.getMaterialId());
     }
 
-    public void deleteAll() {
+    private void deleteAll() {
         materialRepo.deleteAll();
     }
 }
