@@ -1345,10 +1345,10 @@ class ShopSpringbootApplicationTests {
         ord1.getOrderProducts().add(new OrderProduct(1, ord1, fb3, getRandomColor(fb3), getRandomMaterial(fb3)));
 
         Order ord2 = new Order(vlad);
-        ord1.getOrderProducts().add(new OrderProduct(1, ord2, sh4, getRandomColor(sh4), getRandomMaterial(sh4)));
-        ord1.getOrderProducts().add(new OrderProduct(2, ord2, bc2, getRandomColor(bc2), getRandomMaterial(bc2)));
-        ord1.getOrderProducts().add(new OrderProduct(1, ord2, ct3, getRandomColor(ct3), getRandomMaterial(ct3)));
-        ord1.getOrderProducts().add(new OrderProduct(4, ord2, sc4, getRandomColor(sc4), getRandomMaterial(sc4)));
+        ord2.getOrderProducts().add(new OrderProduct(1, ord2, sh4, getRandomColor(sh4), getRandomMaterial(sh4)));
+        ord2.getOrderProducts().add(new OrderProduct(2, ord2, bc2, getRandomColor(bc2), getRandomMaterial(bc2)));
+        ord2.getOrderProducts().add(new OrderProduct(1, ord2, ct3, getRandomColor(ct3), getRandomMaterial(ct3)));
+        ord2.getOrderProducts().add(new OrderProduct(4, ord2, sc4, getRandomColor(sc4), getRandomMaterial(sc4)));
 
         List<Order> orders = new ArrayList<>(List.of(ord1, ord2));
 
