@@ -29,11 +29,7 @@ public class MaterialService {
 
     // CRUD OPERATIONS
 
-    public Material getMaterialEntityByName(String name) {
-        return materialRepo.getMaterialByNameEqualsIgnoreCase(name);
-    }
-
-    private Set<Material> findAll() {
+    public Set<Material> findAll() {
         Set<Material> result = new HashSet<>();
         for (Material material : materialRepo.findAll()) {
             result.add(material);
@@ -41,29 +37,27 @@ public class MaterialService {
         return result;
     }
 
-    private Material findById(Long id) {
-        Optional<Material> result = materialRepo.findById(id);
-        if(result.isEmpty()) return null;
-        else return result.get();
+    public Optional<Material> findById(Long id) {
+        return materialRepo.findById(id);
     }
 
-    private Material create(Material material) {
+    public Material create(Material material) {
         return materialRepo.save(material);
     }
 
-    private void update(Material material) {
+    public void update(Material material) {
         materialRepo.save(material);
     }
 
-    private void deleteById(Long id) {
+    public void deleteById(Long id) {
         materialRepo.deleteById(id);
     }
 
-    private void delete(Material material) {
+    public void delete(Material material) {
         materialRepo.deleteById(material.getMaterialId());
     }
 
-    private void deleteAll() {
+    public void deleteAll() {
         materialRepo.deleteAll();
     }
 }

@@ -29,11 +29,7 @@ public class ColorService {
 
     // CRUD OPERATIONS
 
-    public Color getColorEntityByName(String name) {
-        return colorRepo.getColorByNameEqualsIgnoreCase(name);
-    }
-
-    private Set<Color> findAll() {
+    public Set<Color> findAll() {
         Set<Color> result = new HashSet<>();
         for (Color color : colorRepo.findAll()) {
             result.add(color);
@@ -41,29 +37,27 @@ public class ColorService {
         return result;
     }
 
-    private Color findById(Long id) {
-        Optional<Color> result = colorRepo.findById(id);
-        if(result.isEmpty()) return null;
-        else return result.get();
+    public Optional<Color> findById(Long id) {
+        return colorRepo.findById(id);
     }
 
-    private Color create(Color color) {
+    public Color create(Color color) {
         return colorRepo.save(color);
     }
 
-    private void update(Color color) {
+    public void update(Color color) {
         colorRepo.save(color);
     }
 
-    private void deleteById(Long id) {
+    public void deleteById(Long id) {
         colorRepo.deleteById(id);
     }
 
-    private void delete(Color color) {
+    public void delete(Color color) {
         colorRepo.deleteById(color.getColorId());
     }
 
-    private void deleteAll() {
+    public void deleteAll() {
         colorRepo.deleteAll();
     }
 }

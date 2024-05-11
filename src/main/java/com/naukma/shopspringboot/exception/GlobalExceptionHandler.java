@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public class CustomExceptionHandler {
+public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Map<String, String>> handleExceptions(Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMap(e));
@@ -19,6 +19,11 @@ public class CustomExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public final ResponseEntity<Map<String, String>> handleEntityNotFoundExceptions(EntityNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMap(e));
+    }
+
+    @ExceptionHandler(InvalidOrderException.class)
+    public final ResponseEntity<Map<String, String>> handleEntityNotFoundExceptions(InvalidOrderException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMap(e));
     }
 
     private Map<String, String> errorMap(Exception e) {

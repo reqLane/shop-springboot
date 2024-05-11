@@ -21,11 +21,7 @@ public class SubcategoryService {
 
     // CRUD OPERATIONS
 
-    public Subcategory getSubcategoryEntityByName(String name) {
-        return subcategoryRepo.getSubcategoryByNameEqualsIgnoreCase(name);
-    }
-
-    private Set<Subcategory> findAll() {
+    public Set<Subcategory> findAll() {
         Set<Subcategory> result = new HashSet<>();
         for (Subcategory subcategory : subcategoryRepo.findAll()) {
             result.add(subcategory);
@@ -33,29 +29,27 @@ public class SubcategoryService {
         return result;
     }
 
-    private Subcategory findById(Long id) {
-        Optional<Subcategory> result = subcategoryRepo.findById(id);
-        if(result.isEmpty()) return null;
-        else return result.get();
+    public Optional<Subcategory> findById(Long id) {
+        return subcategoryRepo.findById(id);
     }
 
-    private Subcategory create(Subcategory subcategory) {
+    public Subcategory create(Subcategory subcategory) {
         return subcategoryRepo.save(subcategory);
     }
 
-    private void update(Subcategory subcategory) {
+    public void update(Subcategory subcategory) {
         subcategoryRepo.save(subcategory);
     }
 
-    private void deleteById(Long id) {
+    public void deleteById(Long id) {
         subcategoryRepo.deleteById(id);
     }
 
-    private void delete(Subcategory subcategory) {
+    public void delete(Subcategory subcategory) {
         subcategoryRepo.deleteById(subcategory.getSubcategoryId());
     }
 
-    private void deleteAll() {
+    public void deleteAll() {
         subcategoryRepo.deleteAll();
     }
 }

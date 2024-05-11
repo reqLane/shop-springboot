@@ -21,7 +21,7 @@ public class UserService {
 
     // CRUD OPERATIONS
 
-    private Set<User> findAll() {
+    public Set<User> findAll() {
         Set<User> result = new HashSet<>();
         for (User user : userRepo.findAll()) {
             result.add(user);
@@ -29,29 +29,27 @@ public class UserService {
         return result;
     }
 
-    private User findById(Long id) {
-        Optional<User> result = userRepo.findById(id);
-        if(result.isEmpty()) return null;
-        else return result.get();
+    public Optional<User> findById(Long id) {
+        return userRepo.findById(id);
     }
 
-    private User create(User user) {
+    public User create(User user) {
         return userRepo.save(user);
     }
 
-    private void update(User user) {
+    public void update(User user) {
         userRepo.save(user);
     }
 
-    private void deleteById(Long id) {
+    public void deleteById(Long id) {
         userRepo.deleteById(id);
     }
 
-    private void delete(User user) {
+    public void delete(User user) {
         userRepo.deleteById(user.getUserId());
     }
 
-    private void deleteAll() {
+    public void deleteAll() {
         userRepo.deleteAll();
     }
 }

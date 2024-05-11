@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SubcategoryRepo extends CrudRepository<Subcategory, Long> {
-    Subcategory getSubcategoryByNameEqualsIgnoreCase(String name);
+
 }

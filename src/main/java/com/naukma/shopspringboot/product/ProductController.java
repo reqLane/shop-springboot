@@ -1,10 +1,11 @@
 package com.naukma.shopspringboot.product;
 
+import com.naukma.shopspringboot.color.model.ColorDTO;
+import com.naukma.shopspringboot.material.model.MaterialDTO;
 import com.naukma.shopspringboot.product.model.EdgePricesDTO;
-import com.naukma.shopspringboot.product.model.FilteredProductsRequest;
+import com.naukma.shopspringboot.product.model.FilteredProductsRequestDTO;
 import com.naukma.shopspringboot.product.model.ProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,27 +26,44 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductPictures(productId));
     }
 
+    @GetMapping("/{productId}/colors")
+    public ResponseEntity<List<ColorDTO>> getProductColors(@PathVariable("productId") Long productId) {
+        return ResponseEntity.ok(productService.getProductColors(productId));
+    }
+
+    @GetMapping("/{productId}/materials")
+    public ResponseEntity<List<MaterialDTO>> getProductMaterials(@PathVariable("productId") Long productId) {
+        return ResponseEntity.ok(productService.getProductMaterials(productId));
+    }
+
     @GetMapping("/trending")
     public ResponseEntity<List<ProductDTO>> getTrendingProducts(@RequestParam(name = "size", defaultValue = "4") Integer size) {
         return ResponseEntity.ok(productService.getTrendingProducts(size));
     }
 
     @GetMapping("/filtered-count")
-    public ResponseEntity<Integer> getFilteredProductsCount(@RequestBody FilteredProductsRequest body) {
+    public ResponseEntity<Integer> getFilteredProductsCount(@RequestBody FilteredProductsRequestDTO body) {
         return ResponseEntity.ok(productService.getFilteredProductsCount(body));
     }
 
     @GetMapping("/edge-prices")
-    public ResponseEntity<EdgePricesDTO> getEdgePrices(@RequestBody FilteredProductsRequest body) {
+    public ResponseEntity<EdgePricesDTO> getEdgePrices(@RequestBody FilteredProductsRequestDTO body) {
         return ResponseEntity.ok(productService.getEdgePrices(body));
     }
 
     @GetMapping("/filtered")
     public ResponseEntity<List<ProductDTO>> getFilteredProductsData(
-            @RequestBody FilteredProductsRequest body,
+            @RequestBody FilteredProductsRequestDTO body,
             @RequestParam(name = "price-sort", defaultValue = "asc") String priceSort,
             @RequestParam(name = "page", defaultValue = "1") Integer page,
             @RequestParam(name = "size", defaultValue = "12") Integer size) {
         return ResponseEntity.ok(productService.getFilteredProducts(body, priceSort, page, size));
+    }
+
+    @GetMapping("/{productId}/recommendations")
+    public ResponseEntity<List<ProductDTO>> getProductRecommendations(
+            @PathVariable("productId") Long productId,
+            @RequestParam(name = "size", defaultValue = "4") Integer size) {
+        return ResponseEntity.ok(productService.getProductRecommendations(productId, size));
     }
 }

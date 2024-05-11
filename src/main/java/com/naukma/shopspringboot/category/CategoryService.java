@@ -23,8 +23,8 @@ public class CategoryService {
     // BUSINESS LOGIC
 
     public byte[] getCategoryPicture(Long categoryId) {
-        Category category = findById(categoryId);
-        if (category == null) throw new EntityNotFoundException(String.format("CATEGORY ID-%d - NOT FOUND", categoryId));
+        Category category = findById(categoryId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("CATEGORY ID-%d - NOT FOUND", categoryId)));
 
         return category.getPicture();
     }
@@ -39,8 +39,8 @@ public class CategoryService {
     }
 
     public List<SubcategoryDTO> getSubcategoriesByCategory(Long categoryId) {
-        Category category = findById(categoryId);
-        if (category == null) throw new EntityNotFoundException(String.format("CATEGORY ID-%d - NOT FOUND", categoryId));
+        Category category = findById(categoryId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("CATEGORY ID-%d - NOT FOUND", categoryId)));
 
         return category.getSubcategories()
                 .stream()
@@ -61,11 +61,7 @@ public class CategoryService {
 
     // CRUD OPERATIONS
 
-    public Category getCategoryEntityByName(String name) {
-        return categoryRepo.getCategoryByNameEqualsIgnoreCase(name);
-    }
-
-    private Set<Category> findAll() {
+    public Set<Category> findAll() {
         Set<Category> result = new HashSet<>();
         for (Category category : categoryRepo.findAll()) {
             result.add(category);
@@ -73,29 +69,27 @@ public class CategoryService {
         return result;
     }
 
-    private Category findById(Long id) {
-        Optional<Category> result = categoryRepo.findById(id);
-        if(result.isEmpty()) return null;
-        else return result.get();
+    public Optional<Category> findById(Long id) {
+        return categoryRepo.findById(id);
     }
 
-    private Category create(Category category) {
+    public Category create(Category category) {
         return categoryRepo.save(category);
     }
 
-    private void update(Category category) {
+    public void update(Category category) {
         categoryRepo.save(category);
     }
 
-    private void deleteById(Long id) {
+    public void deleteById(Long id) {
         categoryRepo.deleteById(id);
     }
 
-    private void delete(Category category) {
+    public void delete(Category category) {
         categoryRepo.deleteById(category.getCategoryId());
     }
 
-    private void deleteAll() {
+    public void deleteAll() {
         categoryRepo.deleteAll();
     }
 }

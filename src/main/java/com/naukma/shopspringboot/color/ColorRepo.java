@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ColorRepo extends CrudRepository<Color, Long> {
-    Color getColorByNameEqualsIgnoreCase(String name);
+
 }

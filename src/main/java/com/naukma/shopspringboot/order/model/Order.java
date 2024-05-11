@@ -44,6 +44,21 @@ public class Order {
         this.user = user;
     }
 
+    public Order(BigDecimal price, User user) {
+        this.price = price;
+        this.user = user;
+    }
+
+    public void calculatePrice() {
+        if (price == null) {
+            BigDecimal totalPrice = BigDecimal.ZERO;
+            for (OrderProduct orderProduct : orderProducts) {
+                totalPrice = totalPrice.add(orderProduct.getProduct().getPrice().multiply(new BigDecimal(orderProduct.getAmount())));
+            }
+            setPrice(totalPrice);
+        }
+    }
+
     @PrePersist
     public void prePersist() {
         if (orderDate == null) {
@@ -51,13 +66,6 @@ public class Order {
         }
         if (status == null) {
             setStatus(OrderStatus.PENDING);
-        }
-        if (price == null) {
-            BigDecimal totalPrice = BigDecimal.ZERO;
-            for (OrderProduct orderProduct : orderProducts) {
-                totalPrice = totalPrice.add(orderProduct.getProduct().getPrice().multiply(new BigDecimal(orderProduct.getAmount())));
-            }
-            setPrice(totalPrice);
         }
     }
 }

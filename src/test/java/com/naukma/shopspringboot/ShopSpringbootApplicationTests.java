@@ -81,8 +81,8 @@ class ShopSpringbootApplicationTests {
     void dbTest() {
         //region Category
         Category tables = new Category("Tables", "They are strong and reliable construction. High quality assembly.");
-        Category chairs = new Category("Chairs", "Made of high quality materials. Complete with a hard or soft seat.");
-        Category benches = new Category("Benches", "Qualitatively assembled and distinguished by multi-layer processed materials.");
+        Category chairs = new Category("Chairs", "Made of high quality materialIds. Complete with a hard or soft seat.");
+        Category benches = new Category("Benches", "Qualitatively assembled and distinguished by multi-layer processed materialIds.");
         Category cabinetFurniture = new Category("Furniture", "Oak and metal shelves, chests of drawers, sideboards for any taste.");
         Category beds = new Category("Beds", "The material is solid oak. Completed orthopedic base for the mattress.");
         List<Category> categories = new ArrayList<>(Arrays.asList(tables, chairs, benches, cabinetFurniture, beds));
@@ -955,14 +955,14 @@ class ShopSpringbootApplicationTests {
         //endregion
         //endregion
         
-        //region Product colors
+        //region Product colorIds
         for (Product product : products) {
             Collections.shuffle(colors);
             product.getColors().addAll(colors.subList(0, 3));
         }
         //endregion
 
-        //region Product materials
+        //region Product materialIds
         for (Product product : products) {
             Category productCategory = product.getSubcategory().getCategory();
 
