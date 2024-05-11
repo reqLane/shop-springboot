@@ -1,6 +1,7 @@
 package com.naukma.shopspringboot.product;
 
 import com.naukma.shopspringboot.product.model.FilteredProductsDTO;
+import com.naukma.shopspringboot.product.model.FilteredProductsRequest;
 import com.naukma.shopspringboot.product.model.ProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -31,29 +32,16 @@ public class ProductController {
     }
 
     @GetMapping("/filtered-count")
-    public ResponseEntity<Integer> getFilteredProductsCount(
-            @RequestParam(name = "cat", required = false) String category,
-            @RequestParam(name = "subcat", required = false) String subcategory,
-            @RequestParam(name = "search", required = false) String search,
-            @RequestParam(name = "priceMin", required = false) BigDecimal priceMin,
-            @RequestParam(name = "priceMax", required = false) BigDecimal priceMax,
-            @RequestParam(name = "material", required = false) String material,
-            @RequestParam(name = "color", required = false) String color) {
-        return ResponseEntity.ok(productService.getFilteredProductsCount(category, subcategory, search, priceMin, priceMax, material, color));
+    public ResponseEntity<Integer> getFilteredProductsCount(@RequestBody FilteredProductsRequest body) {
+        return ResponseEntity.ok(productService.getFilteredProductsCount(body));
     }
 
     @GetMapping("/filtered")
     public ResponseEntity<FilteredProductsDTO> getFilteredProductsData(
-            @RequestParam(name = "cat", required = false) String category,
-            @RequestParam(name = "subcat", required = false) String subcategory,
-            @RequestParam(name = "search", required = false) String search,
-            @RequestParam(name = "priceMin", required = false) BigDecimal priceMin,
-            @RequestParam(name = "priceMax", required = false) BigDecimal priceMax,
-            @RequestParam(name = "material", required = false) String material,
-            @RequestParam(name = "color", required = false) String color,
+            @RequestBody FilteredProductsRequest body,
             @RequestParam(name = "priceSort", defaultValue = "asc") String priceSort,
             @RequestParam(name = "page", defaultValue = "1") Integer page,
             @RequestParam(name = "size", defaultValue = "12") Integer size) {
-        return ResponseEntity.ok(productService.getFilteredProducts(category, subcategory, search, priceMin, priceMax, material, color, priceSort, page, size));
+        return ResponseEntity.ok(productService.getFilteredProducts(body, priceSort, page, size));
     }
 }

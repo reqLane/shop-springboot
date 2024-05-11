@@ -104,14 +104,25 @@ public class Product {
                                  String search,
                                  BigDecimal priceMin,
                                  BigDecimal priceMax,
-                                 Material material,
-                                 Color color) {
+                                 Set<Material> materials,
+                                 Set<Color> colors) {
+        Set<Material> mIntersection = new HashSet<>();
+        if(materials != null) {
+            mIntersection.addAll(materials);
+            mIntersection.retainAll(getMaterials());
+        }
+        Set<Color> cIntersection = new HashSet<>();
+        if(colors != null) {
+            cIntersection.addAll(colors);
+            cIntersection.retainAll(getColors());
+        }
+
         return (category == null || getSubcategory().getCategory() == category)
                 && (subcategory == null || getSubcategory() == subcategory)
                 && (search == null || name.toLowerCase().contains(search.toLowerCase()))
                 && (priceMin == null || price.compareTo(priceMin) >= 0)
                 && (priceMax == null || price.compareTo(priceMax) <= 0)
-                && (material == null || materials.contains(material))
-                && (color == null || colors.contains(color));
+                && (materials == null || materials.isEmpty() || !mIntersection.isEmpty())
+                && (colors == null || colors.isEmpty() || !cIntersection.isEmpty());
     }
 }

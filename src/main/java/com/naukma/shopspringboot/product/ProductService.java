@@ -8,6 +8,7 @@ import com.naukma.shopspringboot.material.MaterialService;
 import com.naukma.shopspringboot.material.model.Material;
 import com.naukma.shopspringboot.picture.model.Picture;
 import com.naukma.shopspringboot.product.model.FilteredProductsDTO;
+import com.naukma.shopspringboot.product.model.FilteredProductsRequest;
 import com.naukma.shopspringboot.product.model.Product;
 import com.naukma.shopspringboot.product.model.ProductDTO;
 import com.naukma.shopspringboot.subcategory.SubcategoryService;
@@ -59,77 +60,98 @@ public class ProductService {
         return trending.subList(0, Math.min(size, trending.size()));
     }
 
-    public Integer getFilteredProductsCount(String categoryName,
-                                            String subcategoryName,
-                                            String search,
-                                            BigDecimal priceMin,
-                                            BigDecimal priceMax,
-                                            String materialName,
-                                            String colorName) {
-        Category category = categoryService.getCategoryEntityByName(categoryName);
-        Subcategory subcategory = subcategoryService.getSubcategoryEntityByName(subcategoryName);
-        Material material = materialService.getMaterialEntityByName(materialName);
-        Color color = colorService.getColorEntityByName(colorName);
+    public Integer getFilteredProductsCount(FilteredProductsRequest request) {
+        Category category = categoryService.getCategoryEntityByName(request.categoryName());
+        Subcategory subcategory = subcategoryService.getSubcategoryEntityByName(request.subcategoryName());
 
+        Set<Material> materials = new HashSet<>();
+        if (request.materials() != null) {
+            materials = request.materials()
+                    .stream()
+                    .map(materialService::getMaterialEntityByName)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+        }
+        Set<Color> colors = new HashSet<>();
+        if(request.colors() != null) {
+            colors = request.colors()
+                    .stream()
+                    .map(colorService::getColorEntityByName)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+        }
+
+        Set<Material> finalMaterials = materials;
+        Set<Color> finalColors = colors;
         List<Product> filtered = findAll()
                 .stream()
-                .filter(p -> p.passesFilters(category, subcategory, search, priceMin, priceMax, material, color))
+                .filter(p -> p.passesFilters(category, subcategory, request.search(), request.priceMin(), request.priceMax(), finalMaterials, finalColors))
                 .toList();
 
         return filtered.size();
     }
 
-    public FilteredProductsDTO getFilteredProducts(String categoryName,
-                                                   String subcategoryName,
-                                                   String search,
-                                                   BigDecimal priceMin,
-                                                   BigDecimal priceMax,
-                                                   String materialName,
-                                                   String colorName,
+    public FilteredProductsDTO getFilteredProducts(FilteredProductsRequest request,
                                                    String priceSort,
                                                    Integer page,
                                                    Integer size) {
         if (page < 1) page = 1;
         if (size < 1) size = 3;
 
-        Category category = categoryService.getCategoryEntityByName(categoryName);
-        Subcategory subcategory = subcategoryService.getSubcategoryEntityByName(subcategoryName);
-        Material material = materialService.getMaterialEntityByName(materialName);
-        Color color = colorService.getColorEntityByName(colorName);
+        Category category = categoryService.getCategoryEntityByName(request.categoryName());
+        Subcategory subcategory = subcategoryService.getSubcategoryEntityByName(request.subcategoryName());
 
+        Set<Material> materials = new HashSet<>();
+        if (request.materials() != null) {
+            materials = request.materials()
+                    .stream()
+                    .map(materialService::getMaterialEntityByName)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+        }
+        Set<Color> colors = new HashSet<>();
+        if(request.colors() != null) {
+            colors = request.colors()
+                    .stream()
+                    .map(colorService::getColorEntityByName)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+        }
+
+        Set<Material> finalMaterials = materials;
+        Set<Color> finalColors = colors;
         List<Product> filtered = findAll()
                 .stream()
-                .filter(p -> p.passesFilters(category, subcategory, search, priceMin, priceMax, material, color))
-                .sorted((o1, o2) -> priceSort.equalsIgnoreCase("desc") ? o2.getPrice().compareTo(o1.getPrice()) : o1.getPrice().compareTo(o2.getPrice()))
+                .filter(p -> p.passesFilters(category, subcategory, request.search(), request.priceMin(), request.priceMax(), finalMaterials, finalColors))
+                .sorted((o1, o2) -> {
+                    int priceComparison = priceSort.equalsIgnoreCase("desc") ?
+                            o2.getPrice().compareTo(o1.getPrice()) :
+                            o1.getPrice().compareTo(o2.getPrice());
+                    if (priceComparison == 0) {
+                        return o1.getProductId().compareTo(o2.getProductId());
+                    }
+                    return priceComparison;
+                })
                 .toList();
 
         int start = size * (page - 1);
-        if (start >= filtered.size()) start = filtered.size() - size;
+        if (start >= filtered.size()) start = Math.max(0, filtered.size() - size);
         List<ProductDTO> products = filtered.subList(start, Math.min(start + size, filtered.size()))
                 .stream()
                 .map(DTOMapper::toDTO)
                 .toList();
 
-        Set<Color> colors = filtered
+        List<BigDecimal> prices = filtered
                 .stream()
-                .map(Product::getColors)
-                .flatMap(Set::stream)
-                .collect(Collectors.toSet());
+                .map(Product::getPrice)
+                .toList();
 
-        Set<Material> materials = filtered
+        BigDecimal priceLowBD = prices
                 .stream()
-                .map(Product::getMaterials)
-                .flatMap(Set::stream)
-                .collect(Collectors.toSet());
-
-        Stream<BigDecimal> pricesStream = filtered
-                .stream()
-                .map(Product::getPrice);
-
-        BigDecimal priceLowBD = pricesStream
                 .min(BigDecimal::compareTo)
                 .orElse(null);
-        BigDecimal priceHighBD = pricesStream
+        BigDecimal priceHighBD = prices
+                .stream()
                 .max(BigDecimal::compareTo)
                 .orElse(null);
 
@@ -138,8 +160,6 @@ public class ProductService {
 
         return new FilteredProductsDTO(
                 products,
-                colors.stream().map(DTOMapper::toDTO).toList(),
-                materials.stream().map(DTOMapper::toDTO).toList(),
                 priceLow,
                 priceHigh);
     }

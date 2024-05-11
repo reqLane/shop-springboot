@@ -7,8 +7,6 @@ import java.util.List;
 
 public record FilteredProductsDTO(
         List<ProductDTO> products,
-        List<ColorDTO> colors,
-        List<MaterialDTO> materials,
         Integer priceLow,
         Integer priceHigh
 ) {

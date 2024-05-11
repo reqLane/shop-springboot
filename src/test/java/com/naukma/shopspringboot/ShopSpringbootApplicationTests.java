@@ -84,7 +84,7 @@ class ShopSpringbootApplicationTests {
         Category tables = new Category("Tables", "They are strong and reliable construction. High quality assembly.");
         Category chairs = new Category("Chairs", "Made of high quality materials. Complete with a hard or soft seat.");
         Category benches = new Category("Benches", "Qualitatively assembled and distinguished by multi-layer processed materials.");
-        Category cabinetFurniture = new Category("Cabinet furniture", "Oak and metal shelves, chests of drawers, sideboards for any taste.");
+        Category cabinetFurniture = new Category("Furniture", "Oak and metal shelves, chests of drawers, sideboards for any taste.");
         Category beds = new Category("Beds", "The material is solid oak. Completed orthopedic base for the mattress.");
         List<Category> categories = new ArrayList<>(Arrays.asList(tables, chairs, benches, cabinetFurniture, beds));
         //endregion
