@@ -6,6 +6,7 @@ import com.naukma.shopspringboot.product.model.EdgePricesDTO;
 import com.naukma.shopspringboot.product.model.FilteredProductsRequestDTO;
 import com.naukma.shopspringboot.product.model.ProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,11 @@ public class ProductController {
     @GetMapping("/{productId}/pictures")
     public ResponseEntity<List<byte[]>> getProductPicture(@PathVariable("productId") Long productId) {
         return ResponseEntity.ok(productService.getProductPictures(productId));
+    }
+
+    @GetMapping("/{productId}/picture-main")
+    public ResponseEntity<byte[]> getProductMainPicture(@PathVariable("productId") Long productId) {
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(productService.getProductPictures(productId).get(0));
     }
 
     @GetMapping("/{productId}/colors")
