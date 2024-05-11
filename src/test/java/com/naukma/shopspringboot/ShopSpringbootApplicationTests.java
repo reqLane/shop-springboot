@@ -670,7 +670,7 @@ class ShopSpringbootApplicationTests {
                 72,
                 new BigDecimal("14.6"),
                 "This product comes as 1 packages.",
-                cabinets);
+                chests);
         Product ch2 = new Product("BESTA Chest",
                 "Go ahead and put things aside for a while! A sideboard combination gives you plenty of space to store things and a surface to create an attractive display - or to unload serving dishes while you eat.",
                 new BigDecimal("6599.99"),
@@ -679,7 +679,7 @@ class ShopSpringbootApplicationTests {
                 58,
                 new BigDecimal("10.5"),
                 "This product comes as 2 packages.",
-                cabinets);
+                chests);
         Product ch3 = new Product("SEKTION Chest",
                 "SEKTION kitchen system gives you endless possibilities to design your dream kitchen. Paired with VALLSTENA fronts in white, you get a timeless expression that always feels right.",
                 new BigDecimal("999.99"),
@@ -688,7 +688,7 @@ class ShopSpringbootApplicationTests {
                 72,
                 new BigDecimal("8.9"),
                 "This product comes as 1 package.",
-                cabinets);
+                chests);
         Product ch4 = new Product("BAGGEBO Chest",
                 "Stylish design that matches your existing decor or other items in the BAGGEBO storage series. This glass and mesh display cabinet is simplicity at its best and makes eye-catchers of your finest things.",
                 new BigDecimal("2299.99"),
@@ -697,7 +697,7 @@ class ShopSpringbootApplicationTests {
                 45,
                 new BigDecimal("9.5"),
                 "This product comes as 3 packages.",
-                cabinets);
+                chests);
         //endregion
         //region Nightstands
         Product ns1 = new Product("IVAR Nightstand",
@@ -981,7 +981,7 @@ class ShopSpringbootApplicationTests {
         //region Pictures
         List<Picture> pictures = new ArrayList<>();
         //region dt
-        pictures.add(generatePictureForProduct(dt1, "dt11.jpeg"));
+        pictures.add(generatePictureForProduct(dt1, "dt11.avif"));
         pictures.add(generatePictureForProduct(dt1, "dt12.jpg"));
         pictures.add(generatePictureForProduct(dt1, "dt13.jpg"));
 
@@ -990,8 +990,8 @@ class ShopSpringbootApplicationTests {
         pictures.add(generatePictureForProduct(dt2, "dt23.avif"));
 
         pictures.add(generatePictureForProduct(dt3, "dt31.webp"));
-        pictures.add(generatePictureForProduct(dt3, "dt32.webp"));
-        pictures.add(generatePictureForProduct(dt3, "dt33.jpg"));
+        pictures.add(generatePictureForProduct(dt3, "dt32.avif"));
+        pictures.add(generatePictureForProduct(dt3, "dt33.avif"));
 
         pictures.add(generatePictureForProduct(dt4, "dt41.jpg"));
         pictures.add(generatePictureForProduct(dt4, "dt42.jpg"));

@@ -47,17 +47,17 @@ public class ProductController {
         return ResponseEntity.ok(productService.getTrendingProducts(size));
     }
 
-    @GetMapping("/filtered-count")
+    @PostMapping("/filtered-count")
     public ResponseEntity<Integer> getFilteredProductsCount(@RequestBody FilteredProductsRequestDTO body) {
         return ResponseEntity.ok(productService.getFilteredProductsCount(body));
     }
 
-    @GetMapping("/edge-prices")
+    @PostMapping("/edge-prices")
     public ResponseEntity<EdgePricesDTO> getEdgePrices(@RequestBody FilteredProductsRequestDTO body) {
         return ResponseEntity.ok(productService.getEdgePrices(body));
     }
 
-    @GetMapping("/filtered")
+    @PostMapping("/filtered")
     public ResponseEntity<List<ProductDTO>> getFilteredProductsData(
             @RequestBody FilteredProductsRequestDTO body,
             @RequestParam(name = "price-sort", defaultValue = "asc") String priceSort,
