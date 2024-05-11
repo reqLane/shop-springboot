@@ -7,10 +7,7 @@ import com.naukma.shopspringboot.color.model.Color;
 import com.naukma.shopspringboot.material.MaterialService;
 import com.naukma.shopspringboot.material.model.Material;
 import com.naukma.shopspringboot.picture.model.Picture;
-import com.naukma.shopspringboot.product.model.FilteredProductsDTO;
-import com.naukma.shopspringboot.product.model.FilteredProductsRequest;
-import com.naukma.shopspringboot.product.model.Product;
-import com.naukma.shopspringboot.product.model.ProductDTO;
+import com.naukma.shopspringboot.product.model.*;
 import com.naukma.shopspringboot.subcategory.SubcategoryService;
 import com.naukma.shopspringboot.subcategory.model.Subcategory;
 import com.naukma.shopspringboot.util.DTOMapper;
@@ -91,10 +88,37 @@ public class ProductService {
         return filtered.size();
     }
 
-    public FilteredProductsDTO getFilteredProducts(FilteredProductsRequest request,
-                                                   String priceSort,
-                                                   Integer page,
-                                                   Integer size) {
+    public EdgePricesDTO getEdgePrices(FilteredProductsRequest request) {
+        Category category = categoryService.getCategoryEntityByName(request.categoryName());
+        Subcategory subcategory = subcategoryService.getSubcategoryEntityByName(request.subcategoryName());
+
+        List<Product> selection = findAll()
+                .stream()
+                .filter(p -> subcategory == null || p.getSubcategory() == subcategory)
+                .filter(p -> category == null || p.getSubcategory().getCategory() == category)
+                .toList();
+
+        BigDecimal priceLowBD = selection
+                .stream()
+                .map(Product::getPrice)
+                .min(BigDecimal::compareTo)
+                .orElse(null);
+        BigDecimal priceHighBD = selection
+                .stream()
+                .map(Product::getPrice)
+                .max(BigDecimal::compareTo)
+                .orElse(null);
+
+        Integer priceLow = priceLowBD != null ? (int) priceLowBD.doubleValue() : 0;
+        Integer priceHigh = priceHighBD != null ? (int)priceHighBD.doubleValue() + 1 : 25000;
+
+        return new EdgePricesDTO(priceLow, priceHigh);
+    }
+
+    public List<ProductDTO> getFilteredProducts(FilteredProductsRequest request,
+                                                String priceSort,
+                                                Integer page,
+                                                Integer size) {
         if (page < 1) page = 1;
         if (size < 1) size = 3;
 
@@ -141,27 +165,7 @@ public class ProductService {
                 .map(DTOMapper::toDTO)
                 .toList();
 
-        List<BigDecimal> prices = filtered
-                .stream()
-                .map(Product::getPrice)
-                .toList();
-
-        BigDecimal priceLowBD = prices
-                .stream()
-                .min(BigDecimal::compareTo)
-                .orElse(null);
-        BigDecimal priceHighBD = prices
-                .stream()
-                .max(BigDecimal::compareTo)
-                .orElse(null);
-
-        Integer priceLow = priceLowBD != null ? (int)(priceLowBD.doubleValue()) : null;
-        Integer priceHigh = priceHighBD != null ? ((int)(priceHighBD.doubleValue()) + 1) : null;
-
-        return new FilteredProductsDTO(
-                products,
-                priceLow,
-                priceHigh);
+        return products;
     }
 
     // CRUD OPERATIONS

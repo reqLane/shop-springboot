@@ -1,6 +1,6 @@
 package com.naukma.shopspringboot.product;
 
-import com.naukma.shopspringboot.product.model.FilteredProductsDTO;
+import com.naukma.shopspringboot.product.model.EdgePricesDTO;
 import com.naukma.shopspringboot.product.model.FilteredProductsRequest;
 import com.naukma.shopspringboot.product.model.ProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -36,10 +35,15 @@ public class ProductController {
         return ResponseEntity.ok(productService.getFilteredProductsCount(body));
     }
 
+    @GetMapping("/edge-prices")
+    public ResponseEntity<EdgePricesDTO> getEdgePrices(@RequestBody FilteredProductsRequest body) {
+        return ResponseEntity.ok(productService.getEdgePrices(body));
+    }
+
     @GetMapping("/filtered")
-    public ResponseEntity<FilteredProductsDTO> getFilteredProductsData(
+    public ResponseEntity<List<ProductDTO>> getFilteredProductsData(
             @RequestBody FilteredProductsRequest body,
-            @RequestParam(name = "priceSort", defaultValue = "asc") String priceSort,
+            @RequestParam(name = "price-sort", defaultValue = "asc") String priceSort,
             @RequestParam(name = "page", defaultValue = "1") Integer page,
             @RequestParam(name = "size", defaultValue = "12") Integer size) {
         return ResponseEntity.ok(productService.getFilteredProducts(body, priceSort, page, size));
