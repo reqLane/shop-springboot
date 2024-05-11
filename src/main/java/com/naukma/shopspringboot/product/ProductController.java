@@ -20,9 +20,9 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/{productId}/picture")
-    public ResponseEntity<byte[]> getProductPicture(@PathVariable("productId") Long productId) {
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(productService.getProductPicture(productId));
+    @GetMapping("/{productId}/pictures")
+    public ResponseEntity<List<byte[]>> getProductPicture(@PathVariable("productId") Long productId) {
+        return ResponseEntity.ok(productService.getProductPictures(productId));
     }
 
     @GetMapping("/trending")

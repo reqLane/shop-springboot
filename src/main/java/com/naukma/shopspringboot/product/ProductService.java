@@ -11,13 +11,13 @@ import com.naukma.shopspringboot.product.model.*;
 import com.naukma.shopspringboot.subcategory.SubcategoryService;
 import com.naukma.shopspringboot.subcategory.model.Subcategory;
 import com.naukma.shopspringboot.util.DTOMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ProductService {
@@ -38,13 +38,15 @@ public class ProductService {
 
     // BUSINESS LOGIC
 
-    public byte[] getProductPicture(Long productId) {
+    public List<byte[]> getProductPictures(Long productId) {
         Product product = findById(productId);
-        if (product == null) return null;
-        for (Picture picture : product.getPictures()) {
-            return picture.getPicture();
-        }
-        return null;
+        if (product == null) throw new EntityNotFoundException(String.format("PRODUCT ID-%d - NOT FOUND", productId));
+
+        return product.getPictures()
+                .stream()
+                .sorted(Comparator.comparingLong(Picture::getPictureId))
+                .map(Picture::getPicture)
+                .toList();
     }
 
     public List<ProductDTO> getTrendingProducts(Integer size) {

@@ -2,15 +2,14 @@ package com.naukma.shopspringboot.category;
 
 import com.naukma.shopspringboot.category.model.Category;
 import com.naukma.shopspringboot.category.model.CategoryDTO;
-import com.naukma.shopspringboot.picture.model.Picture;
 import com.naukma.shopspringboot.subcategory.model.Subcategory;
 import com.naukma.shopspringboot.subcategory.model.SubcategoryDTO;
 import com.naukma.shopspringboot.util.DTOMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -25,7 +24,8 @@ public class CategoryService {
 
     public byte[] getCategoryPicture(Long categoryId) {
         Category category = findById(categoryId);
-        if (category == null) return null;
+        if (category == null) throw new EntityNotFoundException(String.format("CATEGORY ID-%d - NOT FOUND", categoryId));
+
         return category.getPicture();
     }
 
@@ -40,7 +40,8 @@ public class CategoryService {
 
     public List<SubcategoryDTO> getSubcategoriesByCategory(Long categoryId) {
         Category category = findById(categoryId);
-        if (category == null) return null;
+        if (category == null) throw new EntityNotFoundException(String.format("CATEGORY ID-%d - NOT FOUND", categoryId));
+
         return category.getSubcategories()
                 .stream()
                 .sorted(Comparator.comparingLong(Subcategory::getSubcategoryId))
