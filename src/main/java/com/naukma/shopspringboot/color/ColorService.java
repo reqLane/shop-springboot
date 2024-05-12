@@ -41,12 +41,8 @@ public class ColorService {
         return colorRepo.findById(id);
     }
 
-    public Color create(Color color) {
+    public Color save(Color color) {
         return colorRepo.save(color);
-    }
-
-    public void update(Color color) {
-        colorRepo.save(color);
     }
 
     public void deleteById(Long id) {

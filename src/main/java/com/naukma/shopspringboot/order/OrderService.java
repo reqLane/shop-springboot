@@ -2,7 +2,7 @@ package com.naukma.shopspringboot.order;
 
 import com.naukma.shopspringboot.color.ColorService;
 import com.naukma.shopspringboot.color.model.Color;
-import com.naukma.shopspringboot.exception.InvalidOrderException;
+import com.naukma.shopspringboot.exception.InvalidOrderDataException;
 import com.naukma.shopspringboot.material.MaterialService;
 import com.naukma.shopspringboot.material.model.Material;
 import com.naukma.shopspringboot.order.model.Order;
@@ -45,9 +45,9 @@ public class OrderService {
 
     public OrderDTO createOrder(OrderRequestDTO request) {
         if (request.orderProducts() == null || request.orderProducts().isEmpty())
-            throw new InvalidOrderException("CAN'T CREATE EMPTY ORDER");
+            throw new InvalidOrderDataException("CAN'T CREATE EMPTY ORDER");
         if (request.price() == null)
-            throw new InvalidOrderException("CAN'T CREATE ORDER WITHOUT PRICE");
+            throw new InvalidOrderDataException("CAN'T CREATE ORDER WITHOUT PRICE");
 
         User user = userService.findById(request.userId())
                 .orElseThrow(() -> new EntityNotFoundException(String.format("USER ID-%d NOT FOUND", request.userId())));
@@ -62,9 +62,9 @@ public class OrderService {
                     .orElseThrow(() -> new EntityNotFoundException(String.format("MATERIAL ID-%d NOT FOUND", orderProductDTO.materialId())));
 
             if (!product.getColors().contains(color))
-                throw new InvalidOrderException(String.format("PRODUCT ID-%d DOESN'T HAVE COLOR ID-%d", product.getProductId(), color.getColorId()));
+                throw new InvalidOrderDataException(String.format("PRODUCT ID-%d DOESN'T HAVE COLOR ID-%d", product.getProductId(), color.getColorId()));
             if (!product.getMaterials().contains(material))
-                throw new InvalidOrderException(String.format("PRODUCT ID-%d DOESN'T HAVE MATERIAL ID-%d", product.getProductId(), material.getMaterialId()));
+                throw new InvalidOrderDataException(String.format("PRODUCT ID-%d DOESN'T HAVE MATERIAL ID-%d", product.getProductId(), material.getMaterialId()));
 
             OrderProduct orderProduct = new OrderProduct(orderProductDTO.amount(), order, product, color, material);
             order.getOrderProducts().add(orderProduct);
@@ -72,10 +72,10 @@ public class OrderService {
 
         order.calculatePrice();
         if (!order.getPrice().equals(request.price()))
-            throw new InvalidOrderException(String.format("RESULTING PRICE %.2f DOESN'T MATCH REQUEST PRICE %.2f", order.getPrice(), request.price()));
+            throw new InvalidOrderDataException(String.format("RESULTING PRICE %.2f DOESN'T MATCH REQUEST PRICE %.2f", order.getPrice(), request.price()));
 
-        create(order);
-        orderProductService.createAll(order.getOrderProducts());
+        save(order);
+        orderProductService.saveAll(order.getOrderProducts());
 
         return DTOMapper.toDTO(order);
     }
@@ -94,12 +94,8 @@ public class OrderService {
         return orderRepo.findById(id);
     }
 
-    public Order create(Order order) {
+    public Order save(Order order) {
         return orderRepo.save(order);
-    }
-
-    public void update(Order order) {
-        orderRepo.save(order);
     }
 
     public void deleteById(Long id) {

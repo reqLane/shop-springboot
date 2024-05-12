@@ -219,12 +219,8 @@ public class ProductService {
         return productRepo.findById(id);
     }
 
-    public Product create(Product product) {
+    public Product save(Product product) {
         return productRepo.save(product);
-    }
-
-    public void update(Product product) {
-        productRepo.save(product);
     }
 
     public void deleteById(Long id) {

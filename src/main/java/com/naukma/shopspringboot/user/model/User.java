@@ -32,11 +32,11 @@ public class User {
     private String fathername;
 
     @Column(unique = true, nullable = false, length = 50)
-    @Email
+    @Email(message = "INVALID USER EMAIL FORMAT")
     private String email;
 
     @Column(unique = true, nullable = false, length = 15)
-    @Pattern(regexp = "^\\d{10,15}$")
+    @Pattern(regexp = "^\\d{10,15}$", message = "INVALID USER PHONE FORMAT")
     private String phone;
 
     private Date birthdate;

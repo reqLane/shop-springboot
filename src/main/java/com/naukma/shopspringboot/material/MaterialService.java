@@ -41,12 +41,8 @@ public class MaterialService {
         return materialRepo.findById(id);
     }
 
-    public Material create(Material material) {
+    public Material save(Material material) {
         return materialRepo.save(material);
-    }
-
-    public void update(Material material) {
-        materialRepo.save(material);
     }
 
     public void deleteById(Long id) {

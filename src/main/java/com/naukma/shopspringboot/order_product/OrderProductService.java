@@ -32,20 +32,16 @@ public class OrderProductService {
         return orderProductRepo.findById(id);
     }
 
-    public OrderProduct create(OrderProduct orderProduct) {
+    public OrderProduct save(OrderProduct orderProduct) {
         return orderProductRepo.save(orderProduct);
     }
 
-    public List<OrderProduct> createAll(Iterable<OrderProduct> orderProducts) {
+    public List<OrderProduct> saveAll(Iterable<OrderProduct> orderProducts) {
         List<OrderProduct> result = new ArrayList<>();
         for (OrderProduct orderProduct : orderProductRepo.saveAll(orderProducts)) {
             result.add(orderProduct);
         }
         return result;
-    }
-
-    public void update(OrderProduct orderProduct) {
-        orderProductRepo.save(orderProduct);
     }
 
     public void deleteById(OrderProductId id) {

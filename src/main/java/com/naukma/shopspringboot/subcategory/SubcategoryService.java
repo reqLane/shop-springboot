@@ -33,12 +33,8 @@ public class SubcategoryService {
         return subcategoryRepo.findById(id);
     }
 
-    public Subcategory create(Subcategory subcategory) {
+    public Subcategory save(Subcategory subcategory) {
         return subcategoryRepo.save(subcategory);
-    }
-
-    public void update(Subcategory subcategory) {
-        subcategoryRepo.save(subcategory);
     }
 
     public void deleteById(Long id) {

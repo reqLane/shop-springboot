@@ -73,12 +73,8 @@ public class CategoryService {
         return categoryRepo.findById(id);
     }
 
-    public Category create(Category category) {
+    public Category save(Category category) {
         return categoryRepo.save(category);
-    }
-
-    public void update(Category category) {
-        categoryRepo.save(category);
     }
 
     public void deleteById(Long id) {
