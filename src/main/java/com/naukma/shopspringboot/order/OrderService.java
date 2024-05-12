@@ -17,7 +17,6 @@ import com.naukma.shopspringboot.user.UserService;
 import com.naukma.shopspringboot.user.model.User;
 import com.naukma.shopspringboot.util.DTOMapper;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -31,7 +30,6 @@ public class OrderService {
     private final OrderProductService orderProductService;
     private final UserService userService;
 
-    @Autowired
     public OrderService(OrderRepo orderRepo, ProductService productService, ColorService colorService, MaterialService materialService, OrderProductService orderProductService, UserService userService) {
         this.orderRepo = orderRepo;
         this.productService = productService;

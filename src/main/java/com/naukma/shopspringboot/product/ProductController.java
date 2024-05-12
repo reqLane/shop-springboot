@@ -5,7 +5,6 @@ import com.naukma.shopspringboot.material.model.MaterialDTO;
 import com.naukma.shopspringboot.product.model.EdgePricesDTO;
 import com.naukma.shopspringboot.product.model.FilteredProductsRequestDTO;
 import com.naukma.shopspringboot.product.model.ProductDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,6 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
-    @Autowired
     public ProductController(ProductService productService) {
         this.productService = productService;
     }

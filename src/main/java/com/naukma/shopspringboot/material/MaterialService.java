@@ -3,7 +3,6 @@ package com.naukma.shopspringboot.material;
 import com.naukma.shopspringboot.material.model.Material;
 import com.naukma.shopspringboot.material.model.MaterialDTO;
 import com.naukma.shopspringboot.util.DTOMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -12,7 +11,6 @@ import java.util.*;
 public class MaterialService {
     private final MaterialRepo materialRepo;
 
-    @Autowired
     public MaterialService(MaterialRepo materialRepo) {
         this.materialRepo = materialRepo;
     }

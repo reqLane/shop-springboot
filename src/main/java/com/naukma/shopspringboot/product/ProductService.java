@@ -14,7 +14,6 @@ import com.naukma.shopspringboot.subcategory.SubcategoryService;
 import com.naukma.shopspringboot.subcategory.model.Subcategory;
 import com.naukma.shopspringboot.util.DTOMapper;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -29,7 +28,6 @@ public class ProductService {
     private final ColorService colorService;
     private final MaterialService materialService;
 
-    @Autowired
     public ProductService(ProductRepo productRepo, CategoryService categoryService, SubcategoryService subcategoryService, ColorService colorService, MaterialService materialService) {
         this.productRepo = productRepo;
         this.categoryService = categoryService;

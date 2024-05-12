@@ -6,7 +6,6 @@ import com.naukma.shopspringboot.subcategory.model.Subcategory;
 import com.naukma.shopspringboot.subcategory.model.SubcategoryDTO;
 import com.naukma.shopspringboot.util.DTOMapper;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -15,7 +14,6 @@ import java.util.*;
 public class CategoryService {
     private final CategoryRepo categoryRepo;
 
-    @Autowired
     public CategoryService(CategoryRepo categoryRepo) {
         this.categoryRepo = categoryRepo;
     }

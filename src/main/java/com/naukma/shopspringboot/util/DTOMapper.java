@@ -42,6 +42,7 @@ public class DTOMapper {
     public static OrderDTO toDTO(Order order) {
         return new OrderDTO(
                 order.getOrderId(),
+                order.getOrderProducts().size(),
                 order.getOrderDate(),
                 order.getPrice(),
                 order.getStatus()

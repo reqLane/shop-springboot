@@ -1,13 +1,11 @@
 package com.naukma.shopspringboot.user;
 
 import com.naukma.shopspringboot.exception.InvalidUserDataException;
-import com.naukma.shopspringboot.user.model.ChangePasswordDTO;
-import com.naukma.shopspringboot.user.model.EditUserProfileDTO;
-import com.naukma.shopspringboot.user.model.User;
-import com.naukma.shopspringboot.user.model.UserDTO;
+import com.naukma.shopspringboot.order.model.OrderDTO;
+import com.naukma.shopspringboot.user.model.*;
 import com.naukma.shopspringboot.util.DTOMapper;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +15,9 @@ import static com.naukma.shopspringboot.util.Utils.*;
 @Service
 public class UserService {
     private final UserRepo userRepo;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    public UserService(UserRepo userRepo, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepo userRepo) {
         this.userRepo = userRepo;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     // BUSINESS LOGIC
@@ -38,13 +33,16 @@ public class UserService {
         User user = findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("USER ID-%d NOT FOUND", userId)));
 
-        if(!isNullOrEmpty(request.name()))
+        if (findByPhone(request.phone()).isPresent() || findByEmail(request.email()).isPresent())
+            throw new InvalidUserDataException("SIGNUP PHONE OR EMAIL IS ALREADY OCCUPIED");
+
+        if (!isNullOrEmpty(request.name()))
             user.setName(request.name());
-        if(!isNullOrEmpty(request.surname()))
+        if (!isNullOrEmpty(request.surname()))
             user.setSurname(request.surname());
-        if(!isNullOrEmpty(request.phone()))
+        if (!isNullOrEmpty(request.phone()))
             user.setPhone(request.phone());
-        if(!isNullOrEmpty(request.email()))
+        if (!isNullOrEmpty(request.email()))
             user.setEmail(request.email());
 
         user.setFathername(isNullOrEmpty(request.fathername()) ? null : request.fathername());
@@ -60,10 +58,22 @@ public class UserService {
         if(isNullOrEmpty(request.password())) throw new InvalidUserDataException("USER PASSWORD CAN'T BE EMPTY");
         if(isNullOrEmpty(request.newPassword())) throw new InvalidUserDataException("USER NEW PASSWORD CAN'T BE EMPTY");
 
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         if(!bCryptPasswordEncoder.matches(request.password(), user.getPassword())) throw new InvalidUserDataException("USER PASSWORD INCORRECT");
 
         user.setPassword(bCryptPasswordEncoder.encode(request.newPassword()));
         save(user);
+    }
+
+    public List<OrderDTO> getUserOrders(Long userId) {
+        User user = findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("USER ID-%d NOT FOUND", userId)));
+
+        return user.getOrders()
+                .stream()
+                .map(DTOMapper::toDTO)
+                .sorted((o1, o2) -> o2.orderDate().compareTo(o1.orderDate()))
+                .toList();
     }
 
     // CRUD OPERATIONS
@@ -78,6 +88,14 @@ public class UserService {
 
     public Optional<User> findById(Long id) {
         return userRepo.findById(id);
+    }
+
+    public Optional<User> findByPhone(String phone) {
+        return userRepo.findByPhoneEquals(phone);
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return userRepo.findByEmailEquals(email);
     }
 
     public User save(User user) {

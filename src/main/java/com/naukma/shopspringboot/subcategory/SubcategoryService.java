@@ -1,7 +1,6 @@
 package com.naukma.shopspringboot.subcategory;
 
 import com.naukma.shopspringboot.subcategory.model.Subcategory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -10,7 +9,6 @@ import java.util.*;
 public class SubcategoryService {
     private final SubcategoryRepo subcategoryRepo;
 
-    @Autowired
     public SubcategoryService(SubcategoryRepo subcategoryRepo) {
         this.subcategoryRepo = subcategoryRepo;
     }

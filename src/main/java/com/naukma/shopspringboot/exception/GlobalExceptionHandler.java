@@ -1,11 +1,11 @@
 package com.naukma.shopspringboot.exception;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -15,11 +15,7 @@ import java.util.*;
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Map<String, String>> handleExceptions(Exception e) {
-        Throwable rootCause = getRootCause(e);
-        if (rootCause instanceof ConstraintViolationException)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMap(getConstraintViolationMessages((ConstraintViolationException) rootCause)));
-        else
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMap(List.of(e.getMessage())));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMap(List.of(e.getMessage())));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -42,12 +38,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMap(List.of(e.getMessage())));
     }
 
-    private Throwable getRootCause(Throwable e) {
-        Throwable rootCause = e;
-        while (rootCause.getCause() != null && rootCause.getCause() != rootCause) {
-            rootCause = rootCause.getCause();
-        }
-        return rootCause;
+    @ExceptionHandler(BadCredentialsException.class)
+    public final ResponseEntity<Map<String, String>> handleBadCredentialsExceptions(BadCredentialsException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMap(List.of(e.getMessage())));
+    }
+
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    public final ResponseEntity<Map<String, String>> handleInternalAuthenticationServiceExceptions(InternalAuthenticationServiceException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMap(List.of(e.getMessage())));
     }
 
     private Map<String, String> errorMap(List<String> messages) {
@@ -56,13 +54,5 @@ public class GlobalExceptionHandler {
             map.put("Error#"+(i+1), messages.get(i));
         }
         return map;
-    }
-
-    private List<String> getConstraintViolationMessages(ConstraintViolationException e) {
-        List<String> messages = new ArrayList<>();
-        for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
-            messages.add(violation.getMessage());
-        }
-        return messages;
     }
 }

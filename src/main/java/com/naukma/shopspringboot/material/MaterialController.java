@@ -1,7 +1,6 @@
 package com.naukma.shopspringboot.material;
 
 import com.naukma.shopspringboot.material.model.MaterialDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +13,6 @@ import java.util.List;
 public class MaterialController {
     private final MaterialService materialService;
 
-    @Autowired
     public MaterialController(MaterialService materialService) {
         this.materialService = materialService;
     }

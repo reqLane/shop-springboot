@@ -2,7 +2,6 @@ package com.naukma.shopspringboot.order_product;
 
 import com.naukma.shopspringboot.order_product.model.OrderProduct;
 import com.naukma.shopspringboot.order_product.model.OrderProductId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -11,7 +10,6 @@ import java.util.*;
 public class OrderProductService {
     private final OrderProductRepo orderProductRepo;
 
-    @Autowired
     public OrderProductService(OrderProductRepo orderProductRepo) {
         this.orderProductRepo = orderProductRepo;
     }

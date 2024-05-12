@@ -18,6 +18,7 @@ import com.naukma.shopspringboot.subcategory.model.Subcategory;
 import com.naukma.shopspringboot.material.MaterialRepo;
 import com.naukma.shopspringboot.user.UserRepo;
 import com.naukma.shopspringboot.user.model.User;
+import com.naukma.shopspringboot.user.role.UserRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,9 +125,8 @@ class ShopSpringbootApplicationTests {
         //endregion
 
         //region User
-        User vlad = new User("Vladyslav", "Marchenko", "vlad5000191@gmail.com", "0677728468");
         String encryptedPassword = bCryptPasswordEncoder.encode("pass");
-        vlad.setPassword(encryptedPassword);
+        User vlad = new User("Vladyslav", "Marchenko", "vlad5000191@gmail.com", "0677728468", encryptedPassword, UserRole.USER);
         //endregion
 
         //region Color

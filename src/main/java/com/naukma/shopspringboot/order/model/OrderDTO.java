@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 
 public record OrderDTO(
         Long orderId,
+        Integer productsCount,
         Timestamp orderDate,
         BigDecimal price,
         OrderStatus status

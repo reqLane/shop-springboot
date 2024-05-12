@@ -3,7 +3,6 @@ package com.naukma.shopspringboot.color;
 import com.naukma.shopspringboot.color.model.Color;
 import com.naukma.shopspringboot.color.model.ColorDTO;
 import com.naukma.shopspringboot.util.DTOMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -12,7 +11,6 @@ import java.util.*;
 public class ColorService {
     private final ColorRepo colorRepo;
 
-    @Autowired
     public ColorService(ColorRepo colorRepo) {
         this.colorRepo = colorRepo;
     }
