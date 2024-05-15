@@ -30,7 +30,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.signUp(body));
     }
 
-    @PostMapping("signin")
+    @PostMapping("/signin")
     public ResponseEntity<JWTTokenDTO> signin(@RequestBody SignInDTO body) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(body.email(), body.password());
         var authUser = authenticationManager.authenticate(usernamePassword);

@@ -79,7 +79,7 @@ class ShopSpringbootApplicationTests {
     }
 
     @Test
-    void dbTest() {
+    void fillDatabase() {
         //region Category
         Category tables = new Category("Tables", "They are strong and reliable construction. High quality assembly.");
         Category chairs = new Category("Chairs", "Made of high quality materialIds. Complete with a hard or soft seat.");
