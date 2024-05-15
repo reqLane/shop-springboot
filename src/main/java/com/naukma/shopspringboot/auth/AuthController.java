@@ -6,6 +6,7 @@ import com.naukma.shopspringboot.auth.model.SignInDTO;
 import com.naukma.shopspringboot.auth.model.SignUpDTO;
 import com.naukma.shopspringboot.user.model.User;
 import com.naukma.shopspringboot.user.model.UserDTO;
+import com.naukma.shopspringboot.util.DTOMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,8 +35,9 @@ public class AuthController {
     public ResponseEntity<JWTTokenDTO> signin(@RequestBody SignInDTO body) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(body.email(), body.password());
         var authUser = authenticationManager.authenticate(usernamePassword);
-        var accessToken = tokenProvider.generateAccessToken((User) authUser.getPrincipal());
-        return ResponseEntity.ok(new JWTTokenDTO(accessToken));
+        User authenticatedUser = (User) authUser.getPrincipal();
+        var accessToken = tokenProvider.generateAccessToken(authenticatedUser);
+        return ResponseEntity.ok(new JWTTokenDTO(accessToken, DTOMapper.toDTO(authenticatedUser)));
     }
 
     @GetMapping("/phone-available/{phone}")
