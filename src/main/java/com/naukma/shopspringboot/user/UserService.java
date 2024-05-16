@@ -33,7 +33,8 @@ public class UserService {
         User user = findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("USER ID-%d NOT FOUND", userId)));
 
-        if (findByPhone(request.phone()).isPresent() || findByEmail(request.email()).isPresent())
+        if ((findByPhone(request.phone()).isPresent() && !user.getPhone().equals(request.phone()))
+                || (findByEmail(request.email()).isPresent() && !user.getEmail().equals(request.email())))
             throw new InvalidUserDataException("SIGNUP PHONE OR EMAIL IS ALREADY OCCUPIED");
 
         if (!isNullOrEmpty(request.name()))
