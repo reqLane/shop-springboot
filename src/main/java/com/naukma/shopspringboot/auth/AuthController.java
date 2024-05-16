@@ -26,6 +26,11 @@ public class AuthController {
         this.tokenProvider = tokenProvider;
     }
 
+    @GetMapping("")
+    public ResponseEntity<?> auth() {
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/signup")
     public ResponseEntity<UserDTO> signUp(@RequestBody SignUpDTO body) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.signUp(body));
