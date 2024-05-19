@@ -1,6 +1,7 @@
 HELP.md
 target/
 src/main/resources/static/images/
+src/test/java/com/naukma/shopspringboot/ShopSpringbootApplicationTests.java
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
